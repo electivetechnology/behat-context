@@ -1,0 +1,16 @@
+{
+    "name": "electivegroup/behat-context",
+    "description": "Behat Testing Contexts",
+    "authors": [
+        {
+            "name": "Kris Rybak",
+            "email": "kris@electivegroup.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5"
+    }
+}
