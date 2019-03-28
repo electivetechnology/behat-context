@@ -13,7 +13,7 @@
         "symfony/http-kernel": "^4.2"
     },
     "autoload": {
-        "psr-4": { "Elective\\BehatContext\\": "Context" }
+        "psr-4": { "Elective\\BehatContext\\": "" }
     },
     "require-dev": {
         "phpunit/phpunit": "^6.5"
