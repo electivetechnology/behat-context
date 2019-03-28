@@ -19,4 +19,9 @@ class RestContext implements Context
     {
         $this->kernel = $kernel;
     }
+
+    public function getKernel(): KernelInterface
+    {
+        return $this->kernel;
+    }
 }
