@@ -7,6 +7,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Elective\BehatContext\Context\RestContext
@@ -38,9 +40,11 @@ class RestContext implements Context
      */
     private $baseUrl;
 
-    public function __construct(KernelInterface $kernel)
+    public function __construct(KernelInterface $kernel, $baseUrl = '')
     {
-        $this->kernel = $kernel;
+        $this->kernel   = $kernel;
+        $this->baseUrl  = $baseUrl;
+        $this->client   = $this->createClient();
     }
 
     public function getKernel(): KernelInterface
@@ -103,6 +107,16 @@ class RestContext implements Context
         return $this;
     }
 
+    public function createClient()
+    {
+        return new Client(
+            [
+                // Base URI is used with relative requests
+                'base_url' => $this->getBaseUrl(),
+            ]
+        );
+    }
+
     /**
      * @When I send a :method request to :url
      */
@@ -119,6 +133,22 @@ class RestContext implements Context
     public function send($method = "GET", $url = "", string $body = null, $headers = array()): self
     {
         $this->request = new Request($method, $this->baseUrl . $url, $headers, $body);
+
+        try {
+            $this->response = $this->getClient()->send($this->request);
+        } catch (RequestException $e) {
+            $this->response = $e->getResponse();
+
+            if (null === $this->response) {
+                throw $e;
+            }
+        } catch (ClientException $e) {
+            $this->response = $e->getResponse();
+
+            if (null === $this->response) {
+                throw $e;
+            }
+        }
 
         return $this;
     }

@@ -105,6 +105,7 @@ class RestContextTest extends TestCase
 
     /**
      * @dataProvider iSendARequestToDataProvider
+     * @expectedException GuzzleHttp\Exception\RequestException
      */
     public function testISendARequestTo($method, $url)
     {
@@ -124,6 +125,7 @@ class RestContextTest extends TestCase
 
     /**
      * @dataProvider sendDataProvider
+     * @expectedException GuzzleHttp\Exception\RequestException
      */
     public function testSend($method = null, $url = null, $body = null)
     {
