@@ -24,4 +24,22 @@ class RestContext implements Context
     {
         return $this->kernel;
     }
+
+    /**
+     * @When I send a :method request to :url
+     */
+    public function iSendARequestTo($method, $url): self
+    {
+        $this->send($method, $url);
+
+        return $this;
+    }
+
+    /**
+     * Sends request
+     */
+    public function send($method = "GET", $url = "", $body = null): self
+    {
+        return $this;
+    }
 }
