@@ -33,6 +33,11 @@ class RestContext implements Context
      */
     private $client;
 
+    /**
+     * @var string
+     */
+    private $baseUrl;
+
     public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
@@ -86,6 +91,18 @@ class RestContext implements Context
         return $this;
     }
 
+    public function getBaseUrl(): string
+    {
+        return $this->baseUrl;
+    }
+
+    public function setBaseUrl(string $baseUrl): self
+    {
+        $this->baseUrl = $baseUrl;
+
+        return $this;
+    }
+
     /**
      * @When I send a :method request to :url
      */
@@ -99,8 +116,10 @@ class RestContext implements Context
     /**
      * Sends request
      */
-    public function send($method = "GET", $url = "", $body = null): self
+    public function send($method = "GET", $url = "", string $body = null, $headers = array()): self
     {
+        $this->request = new Request($method, $this->baseUrl . $url, $headers, $body);
+
         return $this;
     }
 }

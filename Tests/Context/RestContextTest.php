@@ -18,11 +18,8 @@ class RestContextTest extends TestCase
 {
     protected function getContext(): RestContext
     {
-        $kernel = $this->createMock(KernelInterface::class);
-
-        $context = $this->getMockBuilder(RestContext::class)
-            ->setConstructorArgs([$kernel])
-            ->getMock();
+        $kernel  = $this->createMock(KernelInterface::class);
+        $context = new RestContext($kernel);
 
         return $context;
     }
@@ -75,6 +72,24 @@ class RestContextTest extends TestCase
 
         $this->assertInstanceOf(RestContext::class, $context->setClient($client));
         $this->assertInstanceOf(Client::class, $context->getClient());
+    }
+
+    public function baseUrlProvider()
+    {
+        return array(
+            array('/v1'),
+            array('/v1/status'),
+        );
+    }
+    /**
+     * @dataProvider baseUrlProvider
+     */
+    public function testSetGetBaseUrl($baseUrl)
+    {
+        $context = $this->getContext();
+
+        $this->assertInstanceOf(RestContext::class, $context->setBaseUrl($baseUrl));
+        $this->assertEquals($baseUrl, $context->getBaseUrl());
     }
 
     public function iSendARequestToDataProvider()
