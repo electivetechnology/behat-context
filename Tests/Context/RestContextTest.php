@@ -74,6 +74,72 @@ class RestContextTest extends TestCase
         $this->assertInstanceOf(Client::class, $context->getClient());
     }
 
+    public function setGetParametersProvider()
+    {
+        return array(
+            array(
+                array(
+                    "invitations"   => array('FNo0GlFAgcnV'),
+                    "questions"     => array('iseIVggkFkIY'),
+                ),
+                'iseIVggkFkIY',
+                0,
+                'questions'
+            ),
+            array(
+                array(
+                    "names"  => array('John', 'Donald'),
+                    "books"  => array('iseIVggkFkIY'),
+                ),
+                'John',
+                0,
+                'names'
+            ),
+            array(
+                array(
+                    "names"     => array('John', 'Donald', 'Tim'),
+                    "books"     => array('Great Gatsby', 'Ulises', 'the godfather'),
+                    "cities"    => array('Paris', 'London', 'Tokio'),
+                ),
+                'the godfather',
+                2,
+                'books'
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider setGetParametersProvider
+     */
+    public function testSetGetParameters($parameters, $checkParamValue, $checkParamKey, $checkParamPrefix)
+    {
+        $context = $this->getContext();
+
+        $this->assertInstanceOf(RestContext::class, $context->setParameters($parameters));
+        $this->assertEquals($parameters, $context->getParameters());
+        $this->assertEquals($checkParamValue, $context->getParameter($checkParamKey, $checkParamPrefix));
+    }
+
+    public function addParameterDataProvider()
+    {
+        return array(
+            array('John', 'foo', 'names'),
+            array('John', 0, 'names'),
+            array('John', 0),
+        );
+    }
+
+    /**
+     * @dataProvider addParameterDataProvider
+     */
+    public function testAddParameter($value, $key, $prefix = null)
+    {
+        $context = $this->getContext();
+
+        $this->assertInstanceOf(RestContext::class, $context->addParameter($value, $key, $prefix));
+        $this->assertEquals($value, $context->getParameter($key, $prefix));
+    }
+
     public function baseUrlProvider()
     {
         return array(
@@ -132,4 +198,27 @@ class RestContextTest extends TestCase
         $context = $this->getContext();
         $this->assertInstanceOf(RestContext::class, $context->send($method, $url, $body));
     }
+
+    public function applyParametersToStringDataProvider()
+    {
+        return array(
+            array(
+                '/v1/users/{users:0}/friends/{users:2}',
+                ['users' => ['john', 'doe', 'donald', 'trump']],
+                '/v1/users/john/friends/donald'
+            ),
+        );
+    }
+
+    // /**
+    //  * @dataProvider applyParametersToStringDataProvider
+    //  */
+    // public function testApplyParametersToString($string, $parameters = array(), $expected)
+    // {
+    //     $context = $this->getContext();
+    //     $context->setParameters($parameters);
+    //     $ret = $context->applyParametersToString($string);
+    //     $this->assertTrue(is_string($ret));
+    //     $this->assertEquals($expected, $ret);
+    // }
 }

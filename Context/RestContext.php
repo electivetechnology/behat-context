@@ -40,11 +40,17 @@ class RestContext implements Context
      */
     private $baseUrl;
 
+    /**
+     * @var array
+     */
+    private $parameters;
+
     public function __construct(KernelInterface $kernel, $baseUrl = '')
     {
-        $this->kernel   = $kernel;
-        $this->baseUrl  = $baseUrl;
-        $this->client   = $this->createClient();
+        $this->kernel       = $kernel;
+        $this->baseUrl      = $baseUrl;
+        $this->parameters   = array();
+        $this->client       = $this->createClient();
     }
 
     public function getKernel(): KernelInterface
@@ -107,6 +113,58 @@ class RestContext implements Context
         return $this;
     }
 
+    public function getParameters(): array
+    {
+        return $this->parameters;
+    }
+
+    public function setParameters(array $parameters): self
+    {
+        foreach ($parameters as $prefix => $params) {
+            foreach ($params as $key => $value) {
+                $this->addParameter($value, $key, $prefix);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addParameter($value, $key = null, $prefix = null)
+    {
+        if ($prefix) {
+            if ($key) {
+                $this->parameters[$prefix][$key] = $value;
+            } else {
+                $this->parameters[$prefix][] = $value;
+            }
+        } else {
+            if ($key) {
+                $this->parameters['default'][$key] = $value;
+            } else {
+                $this->parameters['default'][] = $value;
+            }
+        }
+
+        return $this;
+    }
+
+    public function getParameter($key, $prefix = null)
+    {
+        if (!$prefix) {
+            if (!isset($this->parameters['default'][$key])) {
+                return null;
+            }
+
+            return $this->parameters['default'][$key];
+        }
+
+        if (!isset($this->parameters[$prefix][$key])) {
+            return null;
+        }
+
+        return $this->parameters[$prefix][$key];
+    }
+
     public function createClient()
     {
         return new Client(
@@ -132,7 +190,7 @@ class RestContext implements Context
      */
     public function send($method = "GET", $url = "", string $body = null, $headers = array()): self
     {
-        $this->request = new Request($method, $this->baseUrl . $url, $headers, $body);
+        $this->request = new Request($method, $this->baseUrl . $this->applyParametersToString($url), $headers, $body);
 
         try {
             $this->response = $this->getClient()->send($this->request);
@@ -151,5 +209,10 @@ class RestContext implements Context
         }
 
         return $this;
+    }
+
+    public function applyParametersToString($str = ""): ?string
+    {
+        return $str;
     }
 }
