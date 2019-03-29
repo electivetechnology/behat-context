@@ -28,6 +28,11 @@ class RestContext implements Context
      */
     private $request;
 
+    /**
+     * @var Client
+     */
+    private $client;
+
     public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
@@ -65,6 +70,18 @@ class RestContext implements Context
     public function setRequest(Request $request): self
     {
         $this->request = $request;
+
+        return $this;
+    }
+
+    public function getClient(): Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(Client $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

@@ -5,6 +5,9 @@ namespace Elective\BehatContext\Tests\Context;
 use Elective\BehatContext\Context\RestContext;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * Elective\BehatContext\Tests\Context\RestContext
@@ -33,6 +36,45 @@ class RestContextTest extends TestCase
             ->getMock();
 
         $this->assertInstanceOf(KernelInterface::class, $context->getKernel());
+    }
+
+    public function testSetGetKernel()
+    {
+        $kernel = $this->createMock(KernelInterface::class);
+
+        $context = $this->getMockBuilder(RestContext::class)
+            ->setConstructorArgs([$kernel])
+            ->getMock();
+
+        $this->assertInstanceOf(RestContext::class, $context->setKernel($kernel));
+        $this->assertInstanceOf(KernelInterface::class, $context->getKernel());
+    }
+
+    public function testSetGetResponse()
+    {
+        $response = $this->createMock(Response::class);
+        $context = $this->getContext();
+
+        $this->assertInstanceOf(RestContext::class, $context->setResponse($response));
+        $this->assertInstanceOf(Response::class, $context->getResponse());
+    }
+
+    public function testSetGetRequest()
+    {
+        $request = $this->createMock(Request::class);
+        $context = $this->getContext();
+
+        $this->assertInstanceOf(RestContext::class, $context->setRequest($request));
+        $this->assertInstanceOf(Request::class, $context->getRequest());
+    }
+
+    public function testSetGetClient()
+    {
+        $client = $this->createMock(Client::class);
+        $context = $this->getContext();
+
+        $this->assertInstanceOf(RestContext::class, $context->setClient($client));
+        $this->assertInstanceOf(Client::class, $context->getClient());
     }
 
     public function iSendARequestToDataProvider()
