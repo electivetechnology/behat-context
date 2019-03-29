@@ -5,13 +5,8 @@ cache:
         - $HOME/.composer/cache/files
         - $HOME/symfony-bridge/.phpunit
 
-env:
-    global:
-        - PHPUNIT_FLAGS="-v"
-        - SYMFONY_PHPUNIT_DIR="$HOME/symfony-bridge/.phpunit"
-
-notifications:
-  slack: electivegroup:ROEhNa2GlwAIIFD1vd7ds64V
+# notifications:
+#   slack: electivegroup:ROEhNa2GlwAIIFD1vd7ds64V
 
 matrix:
     fast_finish: true
