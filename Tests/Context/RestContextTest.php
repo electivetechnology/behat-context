@@ -166,6 +166,7 @@ class RestContextTest extends TestCase
             array('PATCH', '/'),
             array('DELETE', '/v1/status'),
             array('PUT', '/v1'),
+            array('GET', '/v1/users/{users:1}'),
         );
     }
 
@@ -207,18 +208,59 @@ class RestContextTest extends TestCase
                 ['users' => ['john', 'doe', 'donald', 'trump']],
                 '/v1/users/john/friends/donald'
             ),
+            array(
+                'The quick {colour:0} {animal:0} jumps over the lazy {animal:1}.',
+                ['colour' => ['brown'], 'animal' => ['fox', 'dog']],
+                'The quick brown fox jumps over the lazy dog.'
+            ),
         );
     }
 
-    // /**
-    //  * @dataProvider applyParametersToStringDataProvider
-    //  */
-    // public function testApplyParametersToString($string, $parameters = array(), $expected)
-    // {
-    //     $context = $this->getContext();
-    //     $context->setParameters($parameters);
-    //     $ret = $context->applyParametersToString($string);
-    //     $this->assertTrue(is_string($ret));
-    //     $this->assertEquals($expected, $ret);
-    // }
+    /**
+     * @dataProvider applyParametersToStringDataProvider
+     */
+    public function testApplyParametersToString($string, $parameters = array(), $expected)
+    {
+        $context = $this->getContext();
+        $context->setParameters($parameters);
+        $ret = $context->applyParametersToString($string);
+        $this->assertTrue(is_string($ret));
+        $this->assertEquals($expected, $ret);
+    }
+
+    public function getParametersFromStringDataProvider()
+    {
+        return array(
+            array(
+                '/v1/users/{users:0}/emails/{emails:2}',
+                2,
+                [['name' => 'users', 'index' => 0], ['name' => 'emails', 'index' => 2]]
+            ),
+            array(
+                '{users:5}/{emails:2}/{names:1}/{names:3}',
+                4,
+                [['name' => 'users', 'index' => 5], ['name' => 'emails', 'index' => 2], ['name' => 'names', 'index' => 1], ['name' => 'names', 'index' => 3]]
+            ),
+            array('hello world', 0),
+        );
+    }
+
+    /**
+     * Goes through a string and finds embedded parameters
+     *
+     * @dataProvider getParametersFromStringDataProvider
+     */
+    public function testGetParametersFromString($str, $numberOfParams, $params = [])
+    {
+        $context = $this->getContext();
+        $ret    = $context->getParametersFromString($str);
+
+        $this->assertTrue(is_array($ret));
+        $this->assertCount($numberOfParams, $ret);
+
+        foreach ($params as $key => $parameter) {
+            $this->assertTrue($ret[$key][1] == $parameter['name']);
+            $this->assertTrue($ret[$key][3] == $parameter['index']);
+        }
+    }
 }

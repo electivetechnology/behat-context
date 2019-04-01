@@ -211,8 +211,65 @@ class RestContext implements Context
         return $this;
     }
 
+    /**
+     * Applies parameters to string. Replaces parameter placeholder with its corresponding value
+     *
+     * @param   $str string  String to process
+     * @return  stirng       String with values over parameters
+     */
     public function applyParametersToString($str = ""): ?string
     {
+        $parameters = $this->getParametersFromString($str);
+
+        // Match the parameter with it's value
+        foreach ($parameters as $paramSpec) {
+            $val = $this->getParameterValueFromSpec($paramSpec);
+            if (!is_null($val)) {
+                $str = str_replace($paramSpec[0], $val, $str);
+            }
+        }
+
         return $str;
+    }
+
+    /**
+     * Extracts parameters from string
+     *
+     * @param $str  string
+     * @return array        List of matched parameters
+     */
+    public function getParametersFromString($str = ''): array
+    {
+        $re = '/{(\w*)(:)*(\d*)}/m';
+        preg_match_all($re, $str, $parameters, PREG_SET_ORDER, 0);
+
+        return $parameters;
+    }
+
+    /**
+     * Matches parameter spec with it's value in parameters
+     *
+     * @param $paramSpec array
+     * @return string Value of that parameter
+     */
+    public function getParameterValueFromSpec(array $paramSpec)
+    {
+        $val = null;
+
+        if (!empty($paramSpec[2])) {
+            $val = $this->getParameter($paramSpec[3], $paramSpec[1]);
+        } else {
+            $val = $this->getParameter($paramSpec[1]);
+        }
+
+        return $val;
+    }
+
+    /**
+     * @Then the response code should be :code
+     */
+    public function theResponseCodeShouldBe($code)
+    {
+        Assertions::assertEquals($code, $this->getResponse()->getStatusCode());
     }
 }
