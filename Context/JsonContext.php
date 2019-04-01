@@ -45,7 +45,7 @@ class JsonContext implements Context
     {
         try {
             $actual = $this->toJson($value);     
-        } catch (Elective\FormatterBundle\Parsers\ParserException $e) {
+        } catch (\Exception $e) {
             throw new \Exception(
                 'Failed asserting that value is valid JSON'
             );
@@ -57,11 +57,13 @@ class JsonContext implements Context
     /**
      * @Then JSON nodes should contain:
      */
-    public function jsonNodesShouldContain(TableNode $table)
+    public function jsonNodesShouldContain(TableNode $table, $content = [])
     {
         foreach ($table->getRowsHash() as $node => $text) {
-            $this->jsonNodeShouldContain($node, $text);
+            $this->jsonNodeShouldContain($node, $text, $content);
         }
+
+        return true;
     }
 
     /**
@@ -69,9 +71,9 @@ class JsonContext implements Context
      *
      * @Then JSON node :node should contain :text
      */
-    public function jsonNodeShouldContain($node, $text, $content = null)
+    public function jsonNodeShouldContain($node, $text, $content = [])
     {
-        if (is_null($content)) {
+        if (empty($content)) {
             $content = $this->getContent();
         }
 
@@ -85,5 +87,7 @@ class JsonContext implements Context
         $actual = $content[$node];
 
         Assertions::assertRegexp("/$actual/", $text);
+
+        return true;
     }
 }
