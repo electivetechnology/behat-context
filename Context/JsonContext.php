@@ -52,4 +52,38 @@ class JsonContext implements Context
 
         return true;
     }
+
+    /**
+     * @Then JSON nodes should contain:
+     */
+    public function jsonNodesShouldContain(TableNode $table)
+    {
+        foreach ($table->getRowsHash() as $node => $text) {
+            $this->jsonNodeShouldContain($node, $text);
+        }
+    }
+
+    /**
+     * Checks, that given JSON node contains given value
+     *
+     * @Then JSON node :node should contain :text
+     */
+    public function jsonNodeShouldContain($node, $text, $content = null)
+    {
+        if (is_null($content)) {
+            $content = $this->getContent();
+        }
+
+        if (!isset($content[$node])) {
+            throw new \Exception(
+                'Failed asserting that JSON
+            . node '.$node.' is set'
+            );
+        }
+
+        $text = $this->restContext->applyParametersToString($text);
+        $actual = $content[$node];
+
+        Assertions::assertRegexp("/$actual/", $text);
+    }
 }

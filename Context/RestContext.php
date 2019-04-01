@@ -304,4 +304,32 @@ class RestContext implements Context
         $this->jsonContext->isValidJson($content);
         $this->jsonContext->setContent($content);
     }
+
+    /**
+     * @Then the response header :key should be equal to :value
+     */
+    public function theResponseHeaderShouldBeEqualTo($key, $value)
+    {
+        $actual = $this->response->getHeader($key);
+        Assertions::assertSame($value, $actual[0]);
+    }
+
+    // /**
+    //  * @Then the response JSON nodes should contain:
+    //  */
+    // public function theResponseJsonNodesShouldContain(TableNode $table)
+    // {
+    //     // Start at the beginning
+    //     $this->response->getBody()->rewind();
+
+    //     // Get content
+    //     $content = $this->response->getBody()->getContents();
+
+    //     // Check is valid JSON
+    //     $this->jsonContext->isValidJson($content);
+    //     $this->jsonContext->setContent($content);
+
+    //     // Check content
+    //     $this->jsonContext->jsonNodeShouldContain($content);
+    // }
 }
