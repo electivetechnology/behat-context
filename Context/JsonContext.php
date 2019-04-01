@@ -6,6 +6,7 @@ use Elective\BehatContext\Context\JsonContext;
 use Elective\FormatterBundle\Parsers\Json;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Gherkin\Node\TableNode;
 use PHPUnit\Framework\Assert as Assertions;
 
 /**
@@ -81,7 +82,6 @@ class JsonContext implements Context
             );
         }
 
-        $text = $this->restContext->applyParametersToString($text);
         $actual = $content[$node];
 
         Assertions::assertRegexp("/$actual/", $text);

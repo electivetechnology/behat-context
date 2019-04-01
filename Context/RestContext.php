@@ -5,6 +5,7 @@ namespace Elective\BehatContext\Context;
 use Elective\BehatContext\Context\JsonContext;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Gherkin\Node\TableNode;
 use Symfony\Component\HttpKernel\KernelInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
@@ -314,22 +315,22 @@ class RestContext implements Context
         Assertions::assertSame($value, $actual[0]);
     }
 
-    // /**
-    //  * @Then the response JSON nodes should contain:
-    //  */
-    // public function theResponseJsonNodesShouldContain(TableNode $table)
-    // {
-    //     // Start at the beginning
-    //     $this->response->getBody()->rewind();
+    /**
+     * @Then the response JSON nodes should contain:
+     */
+    public function theResponseJsonNodesShouldContain(TableNode $table)
+    {
+        // Start at the beginning
+        $this->response->getBody()->rewind();
 
-    //     // Get content
-    //     $content = $this->response->getBody()->getContents();
+        // Get content
+        $content = $this->response->getBody()->getContents();
 
-    //     // Check is valid JSON
-    //     $this->jsonContext->isValidJson($content);
-    //     $this->jsonContext->setContent($content);
+        // Check is valid JSON
+        $this->jsonContext->isValidJson($content);
+        $this->jsonContext->setContent($this->applyParametersToString($content));
 
-    //     // Check content
-    //     $this->jsonContext->jsonNodeShouldContain($content);
-    // }
+        // Check content
+        $this->jsonContext->jsonNodesShouldContain($table);
+    }
 }
