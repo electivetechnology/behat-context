@@ -2,13 +2,16 @@
 
 namespace Elective\BehatContext\Context;
 
+use Elective\BehatContext\Context\JsonContext;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Symfony\Component\HttpKernel\KernelInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
+use PHPUnit\Framework\Assert as Assertions;
 
 /**
  * Elective\BehatContext\Context\RestContext
@@ -45,12 +48,25 @@ class RestContext implements Context
      */
     private $parameters;
 
+    /**
+     * @var Context
+     */
+    private $jsonContext;
+
     public function __construct(KernelInterface $kernel)
     {
         $this->kernel       = $kernel;
         $this->baseUrl      = getenv('APP_DSN');
         $this->parameters   = array();
         $this->client       = $this->createClient();
+    }
+
+    /** @BeforeScenario */
+    public function gatherContexts(BeforeScenarioScope $scope)
+    {
+        $environment = $scope->getEnvironment();
+    
+        $this->jsonContext = $environment->getContext('Elective\BehatContext\Context\JsonContext');
     }
 
     public function getKernel(): KernelInterface
@@ -271,5 +287,21 @@ class RestContext implements Context
     public function theResponseCodeShouldBe($code)
     {
         Assertions::assertEquals($code, $this->getResponse()->getStatusCode());
+    }
+
+    /**
+     * @Then the response should be a valid JSON
+     */
+    public function theResponseShouldBeAValidJson()
+    {
+        // Start at the beginning
+        $this->response->getBody()->rewind();
+
+        // Get content
+        $content = $this->response->getBody()->getContents();
+
+        // Check is valid JSON
+        $this->jsonContext->isValidJson($content);
+        $this->jsonContext->setContent($content);
     }
 }

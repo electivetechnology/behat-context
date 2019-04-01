@@ -11,7 +11,8 @@
         "php": ">=7.1",
         "behat/behat": "^3.5",
         "symfony/http-kernel": "^4.2",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "electivegroup/formatter-bundle": "^0.0.22"
     },
     "autoload": {
         "psr-4": { "Elective\\BehatContext\\": "" }
