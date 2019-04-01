@@ -13,9 +13,12 @@ use PHPUnit\Framework\Assert as Assertions;
  */
 class JsonContext implements Context
 {
+    /**
+     * @var array
+     */
     private $content;
 
-    public function setContent($content)
+    public function setContent($content): self
     {
         $this->content = $this->toJson($content);
 

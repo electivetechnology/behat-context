@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
 /**
- * Elective\BehatContext\Tests\Context\RestContext
+ * Elective\BehatContext\Tests\Context\RestContextTest
  *
  * @author Kris Rybak <kris@electivegroup.com>
  */
