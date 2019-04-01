@@ -45,10 +45,10 @@ class RestContext implements Context
      */
     private $parameters;
 
-    public function __construct(KernelInterface $kernel, $baseUrl = '')
+    public function __construct(KernelInterface $kernel)
     {
         $this->kernel       = $kernel;
-        $this->baseUrl      = $baseUrl;
+        $this->baseUrl      = getenv('APP_DSN');
         $this->parameters   = array();
         $this->client       = $this->createClient();
     }
@@ -215,7 +215,7 @@ class RestContext implements Context
      * Applies parameters to string. Replaces parameter placeholder with its corresponding value
      *
      * @param   $str string  String to process
-     * @return  stirng       String with values over parameters
+     * @return  string       String with values over parameters
      */
     public function applyParametersToString($str = ""): ?string
     {
