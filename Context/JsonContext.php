@@ -11,7 +11,7 @@ use PHPUnit\Framework\Assert as Assertions;
 /**
  * Elective\BehatContext\Context\JsonContext
  */
-class RestContext implements Context
+class JsonContext implements Context
 {
     private $content;
 
@@ -42,9 +42,11 @@ class RestContext implements Context
         try {
             $actual = $this->toJson($value);     
         } catch (Elective\FormatterBundle\Parsers\ParserException $e) {
-            Assertions::assertTrue(false);
+            throw new \Exception(
+                'Failed asserting that value is valid JSON'
+            );
         }
 
-        Assertions::assertTrue(true);
+        return true;
     }
 }
