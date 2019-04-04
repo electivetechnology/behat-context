@@ -369,6 +369,17 @@ class RestContext implements Context
     }
 
     /**
+     * @Then each response JSON object should have node :node
+     */
+    public function eachResponseJsonObjectShouldHaveNode($node)
+    {
+        $this->prepareJsonContextContent();
+
+        // Check content
+        $this->jsonContext->theJsonNodesShouldExist($node);
+    }
+
+    /**
      * @Then the response JSON node :node should exist
      */
     public function theResponseJsonNodeShouldExist($node)

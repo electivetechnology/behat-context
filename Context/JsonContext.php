@@ -146,6 +146,22 @@ class JsonContext implements Context
     }
 
     /**
+     * @Then JSON nodes should contain:
+     */
+    public function theJsonNodesShouldExist($node, $content = [])
+    {
+        if (empty($content)) {
+            $content = $this->getContent();
+        }
+
+        foreach ($content as $object) {
+            $this->theJsonNodeShouldExist($node, $object);
+        }
+
+        return true;
+    }
+
+    /**
      * @Then JSON node :node should exist
      */
     public function theJsonNodeShouldExist($node, $content = [])
