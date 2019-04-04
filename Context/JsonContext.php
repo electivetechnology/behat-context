@@ -145,9 +145,6 @@ class JsonContext implements Context
         return true;
     }
 
-    /**
-     * @Then JSON nodes should contain:
-     */
     public function theJsonNodesShouldExist($node, $content = [])
     {
         if (empty($content)) {
