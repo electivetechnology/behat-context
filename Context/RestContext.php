@@ -218,11 +218,27 @@ class RestContext implements Context
     }
 
     /**
+     * @When I send a :method request to :url with existing items as parameters
+     */
+    public function iSendARequestToWithExistingItemsAsParameters($method, $url)
+    {
+        $this->iSendARequestToWithExistingItemsAsParametersAndBody($method, $url, null);
+    }
+
+    /**
+     * @When I send a :method request to :url with existing items as parameters and body
+     */
+    public function iSendARequestToWithExistingItemsAsParametersAndBody($method, $url, PyStringNode $string = null)
+    {
+        $this->iSendARequestToWithBody($method, $url, $string);
+    }
+
+    /**
      * Sends request
      */
     public function send($method = "GET", $url = "", string $body = null, $headers = array()): self
     {
-        $this->request = new Request($method, $this->baseUrl . $this->applyParametersToString($url), $headers, $body);
+        $this->request = new Request($method, $this->baseUrl . $this->applyParametersToString($url), $headers, $this->applyParametersToString($body));
 
         try {
             $this->response = $this->getClient()->send($this->request);
