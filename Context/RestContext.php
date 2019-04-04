@@ -379,6 +379,17 @@ class RestContext implements Context
         $this->jsonContext->theJsonNodeShouldExist($node);
     }
 
+    /**
+     * @Then the response should have :numberOf JSON results
+     */
+    public function theResponseShouldHaveJsonResults($numberOf)
+    {
+        $this->prepareJsonContextContent();
+
+        // Check content
+        $this->jsonContext->thereShouldBeJsonResults($numberOf);
+    }
+
     public function prepareJsonContextContent()
     {
         // Start at the beginning

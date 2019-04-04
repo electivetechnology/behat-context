@@ -151,7 +151,7 @@ class JsonContext implements Context
     public function theJsonNodeShouldExist($node, $content = [])
     {
         if (empty($content)) {
-            $content =  $this->getContent();
+            $content = $this->getContent();
         }
 
         if(!isset($content[$node]) && !is_null($content[$node])) {
@@ -162,5 +162,17 @@ class JsonContext implements Context
         }
 
         return true;
+    }
+
+    /**
+     * @Then there should be :numberOf JSON results
+     */
+    public function thereShouldBeJsonResults($numberOf, $content = [])
+    {
+        if (empty($content)) {
+            $content = $this->getContent();
+        }
+
+        Assertions::assertCount((int) $numberOf, $content);
     }
 }
