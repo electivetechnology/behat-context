@@ -6,6 +6,7 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use PHPUnit\Framework\Assert as Assertions;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Elective\BehatContext\Context\EntityContext
@@ -16,6 +17,16 @@ class EntityContext implements Context
      * @var Context
      */
     private $restContext;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $manager;
+
+    public function __construct(EntityManagerInterface $manager)
+    {
+        $this->manager = $manager;
+    }
 
     /** @BeforeScenario */
     public function gatherContexts(BeforeScenarioScope $scope)
@@ -35,7 +46,7 @@ class EntityContext implements Context
 
         $object = new $entity;
 
-        if (!$object instanceof Ucc\Model\ModelInterface) {
+        if (!in_array("Ucc\Model\ModelInterface", class_implements($object))) {
             throw new \Exception(
                 'Method can only load entities that implement Ucc\Model\ModelInterface'
             );
@@ -54,7 +65,6 @@ class EntityContext implements Context
         $this->manager->persist($object);
         $this->manager->flush();
 
-        $this->restContext->addExistingItem($object->getId(), $object);
         $this->restContext->addParameter($object->getId(), null, $prefix);
     }
 }
