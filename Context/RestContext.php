@@ -351,24 +351,35 @@ class RestContext implements Context
      */
     public function theResponseJsonNodesShouldContain(TableNode $table)
     {
-        // Start at the beginning
-        $this->response->getBody()->rewind();
-
-        // Get content
-        $content = $this->response->getBody()->getContents();
-
-        // Check is valid JSON
-        $this->jsonContext->isValidJson($content);
-        $this->jsonContext->setContent($this->applyParametersToString($content));
+        $this->prepareJsonContextContent();
 
         // Check content
         $this->jsonContext->jsonNodesShouldContain($table);
     }
 
     /**
+     * @Then the response JSON nodes should not contain:
+     */
+    public function theResponseJsonNodesShouldNotContain(TableNode $table)
+    {
+        $this->prepareJsonContextContent();
+
+        // Check content
+        $this->jsonContext->jsonNodesShouldNotContain($table);
+    }
+
+    /**
      * @Then the response JSON node :node should exist
      */
     public function theResponseJsonNodeShouldExist($node)
+    {
+        $this->prepareJsonContextContent();
+
+        // Check content
+        $this->jsonContext->theJsonNodeShouldExist($node);
+    }
+
+    public function prepareJsonContextContent()
     {
         // Start at the beginning
         $this->response->getBody()->rewind();
@@ -379,8 +390,5 @@ class RestContext implements Context
         // Check is valid JSON
         $this->jsonContext->isValidJson($content);
         $this->jsonContext->setContent($this->applyParametersToString($content));
-
-        // Check content
-        $this->jsonContext->theJsonNodeShouldExist($node);
     }
 }

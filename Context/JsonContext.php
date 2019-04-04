@@ -19,6 +19,19 @@ class JsonContext implements Context
      */
     private $content;
 
+    /**
+     * @var Context
+     */
+    private $restContext;
+
+    /** @BeforeScenario */
+    public function gatherContexts(BeforeScenarioScope $scope)
+    {
+        $environment = $scope->getEnvironment();
+
+        $this->restContext = $environment->getContext('Elective\BehatContext\Context\RestContext');
+    }
+
     public function setContent($content): self
     {
         $this->content = $this->toJson($content);
@@ -67,6 +80,18 @@ class JsonContext implements Context
     }
 
     /**
+     * @Then JSON nodes should not contain:
+     */
+    public function jsonNodesShouldNotContain(TableNode $table, $content = [])
+    {
+        foreach ($table->getRowsHash() as $node => $text) {
+            $this->jsonNodeShouldNotContain($node, $text, $content);
+        }
+
+        return true;
+    }
+
+    /**
      * Checks, that given JSON node contains given value
      *
      * @Then JSON node :node should contain :text
@@ -87,6 +112,34 @@ class JsonContext implements Context
         $actual = $content[$node];
 
         Assertions::assertRegexp("/$actual/", $text);
+
+        return true;
+    }
+
+    /**
+     * Checks, that given JSON node contains given value
+     *
+     * @Then JSON node :node should not contain :text
+     */
+    public function jsonNodeShouldNotContain($node, $text, $content = [])
+    {
+        if (empty($content)) {
+            $content = $this->getContent();
+        }
+
+        if (!isset($content[$node])) {
+            throw new \Exception(
+                'Failed asserting that JSON
+            . node '.$node.' is set or is not NULL'
+            );
+        }
+
+        $text = $this->restContext->applyParametersToString($text);
+        $actual = $content[$node];
+
+        if ($text !== "NULL") {
+            Assertions::assertNotRegExp("/$actual/", $text);
+        }
 
         return true;
     }
