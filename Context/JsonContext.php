@@ -90,4 +90,23 @@ class JsonContext implements Context
 
         return true;
     }
+
+    /**
+     * @Then JSON node :node should exist
+     */
+    public function theJsonNodeShouldExist($node, $content = [])
+    {
+        if (is_null($content)) {
+            $content =  $this->getContent();
+        }
+
+        if(!isset($content[$node])) {
+            throw new \Exception(
+                'Failed asserting that JSON '
+                .'node '.$node.' is set'
+            );
+        }
+
+        return true;
+    }
 }
