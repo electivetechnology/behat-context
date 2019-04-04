@@ -413,4 +413,15 @@ class RestContext implements Context
         $this->jsonContext->isValidJson($content);
         $this->jsonContext->setContent($this->applyParametersToString($content));
     }
+
+    /**
+     * @Then each response :rowNumber JSON object nodes should contain:
+     */
+    public function eachResponseJsonObjectNodesShouldContain($rowNumber, TableNode $table)
+    {
+        $this->prepareJsonContextContent();
+
+        // Check content
+        $this->jsonContext->jsonNodesShouldContain($numberOf);
+    }
 }

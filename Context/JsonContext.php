@@ -70,10 +70,25 @@ class JsonContext implements Context
     /**
      * @Then JSON nodes should contain:
      */
-    public function jsonNodesShouldContain(TableNode $table, $content = [])
+    public function jsonNodesShouldContain(TableNode $table, $content = [], int $rowNumber = null)
     {
-        foreach ($table->getRowsHash() as $node => $text) {
-            $this->jsonNodeShouldContain($node, $text, $content);
+        if (is_null($rowNumber)) {
+            foreach ($table->getRowsHash() as $node => $text) {
+                $this->jsonNodeShouldContain($node, $text, $content);
+            }
+        }
+
+        $tableHash = $table->getRowsHash();
+
+        if (!isset($tableHash[$rowNumber])) {
+            throw new \Exception(
+                'Result with offset ' . $rowNumber
+                . ' does not exist'
+            );
+        }
+
+        foreach ($tableHash as $node => $text) {
+            $this->jsonNodeShouldContain($node, $text, $content[$rowNumber]);
         }
 
         return true;
