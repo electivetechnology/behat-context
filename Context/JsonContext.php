@@ -96,7 +96,7 @@ class JsonContext implements Context
      */
     public function theJsonNodeShouldExist($node, $content = [])
     {
-        if (is_null($content)) {
+        if (empty($content)) {
             $content =  $this->getContent();
         }
 
