@@ -6,6 +6,7 @@ use Elective\BehatContext\Context\JsonContext;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\PyStringNode;
 use Symfony\Component\HttpKernel\KernelInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
@@ -197,7 +198,21 @@ class RestContext implements Context
      */
     public function iSendARequestTo($method, $url): self
     {
-        $this->send($method, $url);
+        $this->iSendARequestToWithBody($method, $url, null);
+
+        return $this;
+    }
+
+    /**
+     * @When I send a :method request to :url with body:
+     */
+    public function iSendARequestToWithBody($method, $url, PyStringNode $string = null): self
+    {
+        if (!is_null($string)) {
+            $string = $string->__toString();
+        }
+
+        $this->send($method, $url, $string);
 
         return $this;
     }
