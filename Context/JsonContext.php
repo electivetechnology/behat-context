@@ -78,16 +78,22 @@ class JsonContext implements Context
             }
         }
 
-        $tableHash = $table->getRowsHash();
+        if (empty($content)) {
+            $content = $this->getContent();
+        }
 
-        if (!isset($tableHash[$rowNumber])) {
+        // content is 0 indexed, we will use -1 index instead for result set
+        // since it's much easier for contextual processing
+        $rowNumber = $rowNumber -1;
+
+        if (!isset($content[$rowNumber])) {
             throw new \Exception(
                 'Result with offset ' . $rowNumber
                 . ' does not exist'
             );
         }
 
-        foreach ($tableHash as $node => $text) {
+        foreach ($table->getRowsHash() as $node => $text) {
             $this->jsonNodeShouldContain($node, $text, $content[$rowNumber]);
         }
 

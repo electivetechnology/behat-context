@@ -422,6 +422,6 @@ class RestContext implements Context
         $this->prepareJsonContextContent();
 
         // Check content
-        $this->jsonContext->jsonNodesShouldContain($numberOf);
+        $this->jsonContext->jsonNodesShouldContain($table, [], $rowNumber);
     }
 }
