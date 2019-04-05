@@ -415,9 +415,9 @@ class RestContext implements Context
     }
 
     /**
-     * @Then each response :rowNumber JSON object nodes should contain:
+     * @Then the response :rowNumber JSON object nodes should contain:
      */
-    public function eachResponseJsonObjectNodesShouldContain($rowNumber, TableNode $table)
+    public function theResponseJsonObjectNodesShouldContain($rowNumber, TableNode $table)
     {
         $this->prepareJsonContextContent();
 
