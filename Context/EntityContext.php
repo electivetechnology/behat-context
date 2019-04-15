@@ -36,7 +36,7 @@ class EntityContext implements Context
         $this->restContext = $environment->getContext('Elective\BehatContext\Context\RestContext');
     }
 
-    public function thereIsEntity($entity, $row, $prefix = null, array $injectors = array())
+    public function thereIsEntity($entity, $row, $prefix = null, array $injectors = array(), $callable = "getId")
     {
         if (!class_exists($entity)) {
             throw new \Exception(
@@ -65,6 +65,6 @@ class EntityContext implements Context
         $this->manager->persist($object);
         $this->manager->flush();
 
-        $this->restContext->addParameter($object->getId(), null, $prefix);
+        $this->restContext->addParameter($object->$callable(), null, $prefix);
     }
 }
