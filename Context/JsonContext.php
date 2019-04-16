@@ -159,7 +159,10 @@ class JsonContext implements Context
             );
         }
 
-        $text = $this->restContext->applyParametersToString($text);
+        if (!is_null($this->restContext)) {
+            $text = $this->restContext->applyParametersToString($text);
+        }
+
         $actual = $content[$node];
 
         if ($text !== "NULL") {
@@ -191,7 +194,7 @@ class JsonContext implements Context
             $content = $this->getContent();
         }
 
-        if(!isset($content[$node]) && !is_null($content[$node])) {
+        if(!isset($content[$node]) || is_null($content[$node])) {
             throw new \Exception(
                 'Failed asserting that JSON '
                 .'node '.$node.' is set'
@@ -211,5 +214,7 @@ class JsonContext implements Context
         }
 
         Assertions::assertCount((int) $numberOf, $content);
+
+        return $numberOf;
     }
 }

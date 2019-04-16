@@ -198,9 +198,7 @@ class RestContext implements Context
      */
     public function iSendARequestTo($method, $url): self
     {
-        $this->iSendARequestToWithBody($method, $url, null);
-
-        return $this;
+        return $this->iSendARequestToWithBody($method, $url, null);
     }
 
     /**
@@ -212,9 +210,7 @@ class RestContext implements Context
             $string = $string->__toString();
         }
 
-        $this->send($method, $url, $string);
-
-        return $this;
+        return $this->send($method, $url, $string);
     }
 
     /**

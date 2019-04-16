@@ -39,9 +39,7 @@ class RestContextTest extends TestCase
     {
         $kernel = $this->createMock(KernelInterface::class);
 
-        $context = $this->getMockBuilder(RestContext::class)
-            ->setConstructorArgs([$kernel])
-            ->getMock();
+        $context = $this->getContext();
 
         $this->assertInstanceOf(RestContext::class, $context->setKernel($kernel));
         $this->assertInstanceOf(KernelInterface::class, $context->getKernel());
@@ -118,6 +116,7 @@ class RestContextTest extends TestCase
         $this->assertInstanceOf(RestContext::class, $context->setParameters($parameters));
         $this->assertEquals($parameters, $context->getParameters());
         $this->assertEquals($checkParamValue, $context->getParameter($checkParamKey, $checkParamPrefix));
+        $this->assertNull($context->getParameter('abc'));
     }
 
     public function addParameterDataProvider()
@@ -126,6 +125,7 @@ class RestContextTest extends TestCase
             array('John', 'foo', 'names'),
             array('John', 0, 'names'),
             array('John', 0),
+            array('John', 'foo'),
         );
     }
 
@@ -262,5 +262,23 @@ class RestContextTest extends TestCase
             $this->assertTrue($ret[$key][1] == $parameter['name']);
             $this->assertTrue($ret[$key][3] == $parameter['index']);
         }
+    }
+
+    public function iSendARequestToWithBodyDataProvider()
+    {
+        return array(
+            array('GET', ''),
+        );
+    }
+
+    /**
+     * @dataProvider iSendARequestToWithBodyDataProvider
+     */
+    public function testISendARequestToWithBody($method, $url)
+    {
+        $context = $this->getContext();
+        $context->setBaseUrl('http://google.com');
+
+        $this->assertInstanceOf(RestContext::class, $context->iSendARequestToWithBody($method, $url));
     }
 }
