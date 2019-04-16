@@ -130,7 +130,10 @@ class JsonContext implements Context
             );
         }
 
-        $text = $this->restContext->applyParametersToString($text);
+        if (!is_null($this->restContext)) {
+            $text = $this->restContext->applyParametersToString($text);
+        }
+
         $actual = $content[$node];
 
         Assertions::assertRegexp("/$actual/", $text);
