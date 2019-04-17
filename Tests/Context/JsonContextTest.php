@@ -152,6 +152,7 @@ class JsonContextTest extends TestCase
     {
         return array(
             array('foo', ["foo" => "bar"]),
+            array('foo', ["foo" => null]),
             array('foo', ["bar" => "bar", "loo" => "moo", "foo" => "foo"]),
             array('foo', ["bar" => "bar", "loo" => "moo", "foo" => "foo"], true),
         );
@@ -176,8 +177,8 @@ class JsonContextTest extends TestCase
     public function theJsonNodeShouldExistFailDataProvider()
     {
         return array(
-            array('xxx', ["xxx" => null]),
-            array('ooo', ["bar" => "bar", "loo" => "moo", "foo" => "foo"]),
+            array('xxx', [1,2]),
+            array('ooo', ["bar" => ["bar", "foo"], "loo" => "moo", "foo" => "foo"]),
         );
     }
 

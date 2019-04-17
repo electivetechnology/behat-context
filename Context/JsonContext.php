@@ -194,7 +194,7 @@ class JsonContext implements Context
             $content = $this->getContent();
         }
 
-        if(!isset($content[$node]) || is_null($content[$node])) {
+        if(!array_key_exists($node, $content)) {
             throw new \Exception(
                 'Failed asserting that JSON '
                 .'node '.$node.' is set'
