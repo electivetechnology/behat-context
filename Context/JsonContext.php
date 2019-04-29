@@ -136,7 +136,7 @@ class JsonContext implements Context
 
         $actual = $content[$node];
 
-        Assertions::assertRegexp("/$actual/", $text);
+        Assertions::assertEquals($actual, $text);
 
         return true;
     }
