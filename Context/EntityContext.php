@@ -66,5 +66,7 @@ class EntityContext implements Context
         $this->manager->flush();
 
         $this->restContext->addParameter($object->$callable(), null, $prefix);
+
+        return $object;
     }
 }
