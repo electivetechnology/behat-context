@@ -210,6 +210,15 @@ class RestContext implements Context
         return $this;
     }
 
+    public function getHeader($key)
+    {
+        if (isset($this->headers[$key])) {
+            return $this->headers[$key];
+        }
+
+        return null;
+    }
+
     public function createClient()
     {
         return new Client(
