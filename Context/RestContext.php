@@ -51,6 +51,11 @@ class RestContext implements Context
     private $parameters;
 
     /**
+     * @var array
+     */
+    private $headers;
+
+    /**
      * @var Context
      */
     private $jsonContext;
@@ -60,6 +65,7 @@ class RestContext implements Context
         $this->kernel       = $kernel;
         $this->baseUrl      = getenv('APP_DSN');
         $this->parameters   = array();
+        $this->headers      = array();
         $this->client       = $this->createClient();
     }
 
@@ -183,6 +189,27 @@ class RestContext implements Context
         return $this->parameters[$prefix][$key];
     }
 
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    public function setHeaders(array $headers): self
+    {
+        foreach ($headers as $key => $value) {
+            $this->addHeader($key, $value);
+        }
+
+        return $this;
+    }
+
+    public function addHeader($key, $value): self
+    {
+        $this->headers[$key] = $value;
+
+        return $this;
+    }
+
     public function createClient()
     {
         return new Client(
@@ -234,6 +261,8 @@ class RestContext implements Context
      */
     public function send($method = "GET", $url = "", string $body = null, $headers = array()): self
     {
+        $headers = array_merge($headers, $this->getHeaders());
+
         $this->request = new Request($method, $this->baseUrl . $this->applyParametersToString($url), $headers, $this->applyParametersToString($body));
 
         try {

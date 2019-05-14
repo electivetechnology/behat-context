@@ -281,4 +281,25 @@ class RestContextTest extends TestCase
 
         $this->assertInstanceOf(RestContext::class, $context->iSendARequestToWithBody($method, $url));
     }
+
+    public function setGetHeadersProvider()
+    {
+        return array(
+            array(['foo' => 'moo', 'token' => 'abc123']),
+        );
+    }
+
+    /**
+     * @dataProvider setGetHeadersProvider
+     */
+    public function testSetGetHeaders($headers)
+    {
+        $context = $this->getContext();
+
+        $this->assertInstanceOf(RestContext::class, $context->setHeaders($headers));
+        $this->assertEquals($headers, $context->getHeaders());
+        foreach ($headers as $key => $value) {
+            $this->assertEquals($value, $context->getHeader($key));
+        }
+    }
 }
