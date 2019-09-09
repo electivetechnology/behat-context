@@ -48,7 +48,12 @@ class RestContext implements Context
     /**
      * @var array
      */
-    private $parameters;
+    private $existingItems = [];
+
+    /**
+     * @var array
+     */
+    private $parameters = [];
 
     /**
      * @var array
@@ -227,6 +232,27 @@ class RestContext implements Context
                 'base_url' => $this->getBaseUrl(),
             ]
         );
+    }
+
+    public function addExistingItem(string $id, $value)
+    {
+        $this->existingItems[$id] = $value;
+
+        return $this;
+    }
+
+    public function getExistingItem(string $id)
+    {
+        if (isset($this->existingItems[$id])) {
+            return $this->existingItems[$id];
+        }
+
+        return null;
+    }
+
+    public function getExistingItemFirstKey()
+    {
+        return array_key_first($this->existingItems);
     }
 
     /**
