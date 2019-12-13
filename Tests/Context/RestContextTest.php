@@ -184,9 +184,9 @@ class RestContextTest extends TestCase
     {
         return array(
             array('DELETE', '/v1/status', 'string'),
-            array(null, '/v1/status', 'string'),
-            array(null, null, 'string'),
-            array(null, null, null),
+            array('GET', '/v1/status', 'string'),
+            array('POST', null, 'string'),
+            array('OPTION', null, null),
         );
     }
 
@@ -194,7 +194,7 @@ class RestContextTest extends TestCase
      * @dataProvider sendDataProvider
      * @expectedException GuzzleHttp\Exception\RequestException
      */
-    public function testSend($method = null, $url = null, $body = null)
+    public function testSend($method = 'GET', $url = null, $body = null)
     {
         $context = $this->getContext();
         $this->assertInstanceOf(RestContext::class, $context->send($method, $url, $body));
