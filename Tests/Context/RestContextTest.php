@@ -172,10 +172,10 @@ class RestContextTest extends TestCase
 
     /**
      * @dataProvider iSendARequestToDataProvider
-     * @expectedException GuzzleHttp\Exception\RequestException
      */
     public function testISendARequestTo($method, $url)
     {
+        $this->expectException(\GuzzleHttp\Exception\RequestException::class);
         $context = $this->getContext();
         $this->assertInstanceOf(RestContext::class, $context->iSendARequestTo($method, $url));
     }
@@ -192,10 +192,10 @@ class RestContextTest extends TestCase
 
     /**
      * @dataProvider sendDataProvider
-     * @expectedException GuzzleHttp\Exception\RequestException
      */
     public function testSend($method = 'GET', $url = null, $body = null)
     {
+        $this->expectException(\GuzzleHttp\Exception\RequestException::class);
         $context = $this->getContext();
         $this->assertInstanceOf(RestContext::class, $context->send($method, $url, $body));
     }

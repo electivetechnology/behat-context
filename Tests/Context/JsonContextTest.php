@@ -58,13 +58,13 @@ class JsonContextTest extends TestCase
 
     /**
      * @dataProvider isValidJsonFailDataProvider
-     * @expectedException \Exception
-     * @expectedExceptionMessage Failed asserting that value is valid JSON
      */
     public function testIsValidJsonFail($json)
     {
         $context = $this->getContext();
 
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Failed asserting that value is valid JSON');
         $this->assertTrue($context->isValidJson($json));
     }
 
@@ -107,10 +107,10 @@ class JsonContextTest extends TestCase
 
     /**
      * @dataProvider jsonNodesShouldContainFailDataProvider
-     * @expectedException Exception
      */
     public function testJsonNodesShouldContainFail($table, $content, $rowNumber = null, $useContentSetter = false)
     {
+        $this->expectException(\Exception::class);
         $context = $this->getContext();
         $table = new TableNode($table);
         if ($useContentSetter) {
@@ -184,10 +184,10 @@ class JsonContextTest extends TestCase
 
     /**
      * @dataProvider theJsonNodeShouldExistFailDataProvider
-     * @expectedException Exception
      */
     public function testTheJsonNodeShouldExistFail($node, $content)
     {
+        $this->expectException(\Exception::class);
         $context = $this->getContext();
 
         $this->assertTrue($context->theJsonNodeShouldExist($node, $content));
@@ -288,10 +288,10 @@ class JsonContextTest extends TestCase
 
     /**
      * @dataProvider jsonNodeShouldNotContainfailDataProvider
-     * @expectedException Exception
      */
     public function testJsonNodeShouldNotContainFail($node, $text, $content = [], $useContentSetter = false)
     {
+        $this->expectException(\Exception::class);
         $context = $this->getContext();
 
         if ($useContentSetter) {
