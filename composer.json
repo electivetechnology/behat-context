@@ -10,10 +10,10 @@
     "require": {
         "php": "^7.2",
         "behat/behat": "^3.5",
-        "doctrine/orm": "^2.6",
+        "doctrine/orm": "2.7.5",
         "symfony/http-kernel": "^4.3",
         "guzzlehttp/guzzle": "^6.3",
-        "electivegroup/formatter-bundle": "^0"
+        "electivegroup/formatter-bundle": "dev-orm"
     },
     "autoload": {
         "psr-4": { "Elective\\BehatContext\\": "" }
