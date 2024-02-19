@@ -12,7 +12,7 @@
         "behat/behat": "^3.5",
         "doctrine/orm": "2.7.5",
         "symfony/http-kernel": "^5.3",
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "^6.3|^7.0",
         "electivegroup/formatter-bundle": "dev-orm-sym5"
     },
     "autoload": {
