@@ -135,6 +135,11 @@ class JsonContext implements Context
 
         $actual = $content[$node];
 
+        // Covert result to string for comparison
+        if (is_bool($actual)) {
+            $actual = ($actual) ? 'true' : 'false';
+        }
+
         Assertions::assertEquals($actual, $text);
 
         return true;
