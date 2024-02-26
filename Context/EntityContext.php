@@ -4,8 +4,6 @@ namespace Elective\BehatContext\Context;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Behat\Gherkin\Node\TableNode;
-use PHPUnit\Framework\Assert as Assertions;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Elective\BehatContext\Context;
 
-use Elective\BehatContext\Context\JsonContext;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;

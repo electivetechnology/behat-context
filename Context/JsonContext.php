@@ -2,7 +2,6 @@
 
 namespace Elective\BehatContext\Context;
 
-use Elective\BehatContext\Context\JsonContext;
 use Elective\FormatterBundle\Parsers\Json;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
@@ -216,5 +215,41 @@ class JsonContext implements Context
         Assertions::assertCount((int) $numberOf, $content);
 
         return $numberOf;
+    }
+
+     /**
+     * @Then response :rowNumber JSON object nodes should contain:
+     */
+    public function responseJsonObjectNodesShouldContain($rowNumber, TableNode $table)
+    {
+        $json = $this->getContent();
+
+        if (!is_array($json)) {
+            throw new \Exception(
+                'Expected result set to be an array of objects'
+            );
+        }
+
+        if (!is_numeric($rowNumber)) {
+            switch ($rowNumber) {
+                case 'first':
+                    $rowNumber = array_key_first($json);
+                    break;
+                case 'last':
+                    $rowNumber = array_key_last($json);
+                    break;
+            }
+        }
+
+        if (!isset($json[$rowNumber])) {
+            throw new \Exception(
+                'Result with offset ' . $rowNumber
+                . ' does not exist'
+            );
+        }
+
+        foreach ($table->getRowsHash() as $node => $text) {
+            $this->jsonNodeShouldContain($node, $text, $json[$rowNumber]);
+        }
     }
 }
